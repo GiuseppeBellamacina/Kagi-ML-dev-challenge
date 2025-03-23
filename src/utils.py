@@ -69,6 +69,7 @@ class StdOutHandler:
             content = f"<h3>🌐 Search Status</h3><p>{self.results_text}</p>"
             self.containers["results"].markdown(content, unsafe_allow_html=True)
         if show_latency and "latency" in self.containers:
+            self.latency = time() - self.latency
             latency_content = f"<p><b>⌛ Latency:</b> {self.latency:.2f} sec</p>"
             self.containers["latency"].markdown(latency_content, unsafe_allow_html=True)
         if self.debug:
