@@ -2,7 +2,7 @@ import os
 import asyncio
 import json
 
-from dotenv import load_dotenv, find_dotenv
+#from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from starlette.responses import StreamingResponse, JSONResponse
@@ -25,8 +25,8 @@ chain = embedder = client = db = None
 async def lifespan(app: FastAPI):
     global chain, embedder, client, db
     ### Environment ###
-    load_dotenv(find_dotenv())
-    print("Environment variables loaded")
+    #load_dotenv(find_dotenv())
+    #print("Environment variables loaded")
 
 
     ### LLM configuration ###
