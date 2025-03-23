@@ -3,7 +3,7 @@ import httpx
 import json
 import asyncio
 
-from utils import StdOutHandler, interleave_lists
+from src.utils import StdOutHandler, interleave_lists
 
 SEARCH_URL = "http://127.0.0.1:8100/search"
 SEARCH_LLM_URL = "http://127.0.0.1:8100/search_llm"

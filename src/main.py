@@ -13,8 +13,8 @@ from langchain_core.documents import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 
-from utils import Request
-from prompt import make_prompt
+from src.utils import Request
+from src.prompt import make_prompt
 
 
 chain = embedder = client = db = None
@@ -72,7 +72,6 @@ async def lifespan(app: FastAPI):
 
 # FastAPI app
 app = FastAPI(lifespan=lifespan)
-print("API ready")
 
 
 def serialize_docs(docs: list[Document]) -> list[dict]:
