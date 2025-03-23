@@ -1,0 +1,13 @@
+contextlib
+fastapi
+httpx
+langchain
+langchain_core
+langchain_huggingface
+langchain_openai
+weaviate
+langchain_weaviate
+pydantic
+starlette
+streamlit
+uvicorn
