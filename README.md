@@ -1,1 +1,2 @@
-# warmuptask-reranking
+# Kagi-ML-dev-challenge
+
