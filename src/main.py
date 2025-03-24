@@ -2,7 +2,7 @@ import os
 import asyncio
 import json
 
-from dotenv import load_dotenv, find_dotenv
+#from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from starlette.responses import StreamingResponse, JSONResponse
@@ -10,7 +10,7 @@ import weaviate
 from weaviate.classes.init import Auth
 from langchain_weaviate import WeaviateVectorStore
 from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_openai import ChatOpenAI
 
 from src.utils import Request
@@ -25,8 +25,8 @@ chain = embedder = client = db = None
 async def lifespan(app: FastAPI):
     global chain, embedder, client, db
     ### Environment ###
-    load_dotenv(find_dotenv())
-    print("Environment variables loaded")
+    #load_dotenv(find_dotenv())
+    #print("Environment variables loaded")
 
 
     ### LLM configuration ###
@@ -38,8 +38,8 @@ async def lifespan(app: FastAPI):
 
     ### Embedder configuration ###
     model_name = 'sentence-transformers/all-mpnet-base-v2'
-    embedder = HuggingFaceEmbeddings(model_name=model_name, model_kwargs={'device': 'cpu'})
-    print("Embedder created")
+    #embedder = HuggingFaceEmbeddings(model_name=model_name, model_kwargs={'device': 'cpu'})
+    #print("Embedder created")
 
 
     ### WEAVIATE cliet configuration ###
@@ -105,6 +105,10 @@ async def search(request: Request):
     
     results = await search_stories(query, k)
     return JSONResponse({"results": results})
+
+@app.get("/test")
+async def test():
+    return {"message": "Hello, World!"}
 
 
 async def generate_results(query, k):
