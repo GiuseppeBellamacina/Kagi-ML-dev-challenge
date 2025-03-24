@@ -2,6 +2,7 @@ fastapi
 httpx
 langchain
 langchain_core
+huggingface_hub
 langchain_huggingface
 langchain_openai
 weaviate
