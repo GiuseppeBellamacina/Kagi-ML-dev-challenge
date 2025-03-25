@@ -111,7 +111,7 @@ async def handle_llm_search(client: httpx.AsyncClient, handler: StdOutHandler):
         number_of_results = sum(len(r) for r in results)
         st.session_state.results = interleave_lists(results)
         st.session_state.duplicate_results = (
-            len(st.session_state.results) - number_of_results
+            number_of_results - len(st.session_state.results)
         )
 
 
