@@ -56,5 +56,5 @@ def make_prompt():
         suffix="User Input: {input}",
         input_variables=["input"],
     )
-    
+
     return prompt
