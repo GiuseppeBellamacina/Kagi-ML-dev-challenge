@@ -14,6 +14,7 @@ class StdOutHandler:
     """
     Handles the output of the LLM and the results from the DB.
     """
+
     def __init__(self, debug=False):
         self.debug = debug
         self.containers = {}
@@ -36,7 +37,6 @@ class StdOutHandler:
         """Handles the new chunk of text from the LLM."""
         if not chunk:
             return
-
         if self.first_token:
             self.first_token = False
             self.latency = time() - self.latency
@@ -44,20 +44,19 @@ class StdOutHandler:
                 print(f"[First token received after {self.latency:.2f} sec]")
             if "latency" in self.containers:
                 latency_content = f"<p><b>⌛ Latency:</b> {self.latency:.2f} sec</p>"
-                self.containers["latency"].markdown(latency_content, unsafe_allow_html=True)
-        
+                self.containers["latency"].markdown(
+                    latency_content, unsafe_allow_html=True
+                )
         self.llm_text += chunk.replace("\n", "<br>")
         if "llm" in self.containers:
-            content = (
-            f"<h3>🔄 Query Expansion</h3>"
-            f"<p>{self.llm_text}</p>"
-            )
+            content = f"<h3>🔄 Query Expansion</h3>" f"<p>{self.llm_text}</p>"
             self.containers["llm"].markdown(content, unsafe_allow_html=True)
-        
         if self.debug:
             print(chunk, end="", flush=True)
 
-    def on_new_results(self, query: str, results: list, show_latency: bool = False) -> None:
+    def on_new_results(
+        self, query: str, results: list, show_latency: bool = False
+    ) -> None:
         """Handles the new results from the DB."""
         count = len(results)
         if count == 0:
@@ -82,34 +81,38 @@ class StdOutHandler:
         if self.debug:
             print(f"\033[1;31m[STDOUTHANDLER ERROR]\033[0m: {error}")
         if "errors" in self.containers:
-            self.containers["errors"].markdown(f"<h3>❌ Error</h3><p>{error}</p>", unsafe_allow_html=True)
+            self.containers["errors"].markdown(
+                f"<h3>❌ Error</h3><p>{error}</p>", unsafe_allow_html=True
+            )
         raise error
 
 
-class ChainInterface(ABC):   
+class ChainInterface(ABC):
     @abstractmethod
     def invoke(self, input, containers=None):
         pass
-    
+
     @abstractmethod
     def stream(self, input, containers=None):
         pass
-    
+
     @abstractmethod
     async def ainvoke(self, input, containers=None):
         pass
-    
+
     @abstractmethod
     async def astream(self, input, containers=None):
         pass
 
 
 class Chain(ChainInterface):
-    def __init__(self, runnable: Runnable, handler: StdOutHandler | None, name: str = "Chain"):
+    def __init__(
+        self, runnable: Runnable, handler: StdOutHandler | None, name: str = "Chain"
+    ):
         self.runnable = runnable
         self.handler = handler
         self.name = name
-    
+
     def invoke(self, input, containers=None):
         try:
             if self.handler:
@@ -124,7 +127,7 @@ class Chain(ChainInterface):
             else:
                 raise e
             return ""
-    
+
     async def ainvoke(self, input, containers=None):
         try:
             if self.handler:
@@ -157,7 +160,7 @@ class Chain(ChainInterface):
             else:
                 raise e
             return ""
-    
+
     async def astream(self, input, containers=None):
         try:
             if self.handler:
@@ -184,7 +187,7 @@ def interleave_lists(lists):
     seen_ids = set()
     for elements in zip_longest(*lists, fillvalue=None):
         for item in elements:
-            if item is not None and item['id'] not in seen_ids:
-                seen_ids.add(item['id'])
+            if item is not None and item["hn_id"] not in seen_ids:
+                seen_ids.add(item["hn_id"])
                 result.append(item)
     return result
