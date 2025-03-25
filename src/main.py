@@ -2,7 +2,6 @@ import os
 import asyncio
 import json
 
-#from dotenv import load_dotenv, find_dotenv
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from starlette.responses import StreamingResponse, JSONResponse
@@ -24,9 +23,6 @@ chain = embedder = client = db = None
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global chain, embedder, client, db
-    ### Environment ###
-    #load_dotenv(find_dotenv())
-    #print("Environment variables loaded")
 
 
     ### LLM configuration ###
@@ -38,8 +34,11 @@ async def lifespan(app: FastAPI):
 
     ### Embedder configuration ###
     model_name = 'sentence-transformers/all-mpnet-base-v2'
-    #embedder = HuggingFaceEmbeddings(model_name=model_name, model_kwargs={'device': 'cpu'})
-    #print("Embedder created")
+    embedder = HuggingFaceEndpointEmbeddings(  
+        model=model_name,  
+        task="feature-extraction"
+    )
+    print("Embedder created")
 
 
     ### WEAVIATE cliet configuration ###
@@ -106,9 +105,11 @@ async def search(request: Request):
     results = await search_stories(query, k)
     return JSONResponse({"results": results})
 
-@app.get("/test")
-async def test():
-    return {"message": "Hello, World!"}
+
+@app.get("/keep_alive")
+async def keep_alive():
+    # A simple endpoint to keep the server alive and prevent it from sleeping.
+    return {"message": "I don't want to spend money on a better hosting plan"}
 
 
 async def generate_results(query, k):

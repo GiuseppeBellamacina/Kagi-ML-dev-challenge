@@ -3,7 +3,7 @@ import httpx
 import json
 import asyncio
 
-from src.utils import StdOutHandler, interleave_lists
+from utils import StdOutHandler, interleave_lists
 
 SEARCH_URL = "http://127.0.0.1:8100/search"
 SEARCH_LLM_URL = "http://127.0.0.1:8100/search_llm"
@@ -104,8 +104,8 @@ if st.session_state.results:
         with st.container():
             st.markdown(
                 f"""
-                <div style="padding: 10px; border-radius: 10px; background-color: #f1e894; margin-bottom: 10px;">
-                    <h4 style="margin-bottom: 5px;">🔗 <a href="{url}" target="_blank">{title}</a></h4>
+                <div style="padding: 10px; border-radius: 10px; background-color: #191919; margin-bottom: 10px;">
+                    <h4 style="margin-bottom: 5px;">🔗 <a href="{url}" target="_blank" style="color: #FFB319;">{title}</a></h4>
                 </div>
                 """,
                 unsafe_allow_html=True
