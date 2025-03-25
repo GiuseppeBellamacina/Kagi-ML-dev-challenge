@@ -63,7 +63,7 @@ class StdOutHandler:
         if count == 0:
             message = f"🔍 <i>{query}</i> ❌ <b>No results found.</b><br>"
         else:
-            message = f"🔍 <i>{query}</i> ✅ <b>{count} results received.</b><br>"
+            message = f"🔍 <i>{query}</i> ✅ <b>{count} results</b><br>"
         self.results_text += message
         if "results" in self.containers:
             content = f"<h3>🌐 Search Status</h3><p>{self.results_text}</p>"
