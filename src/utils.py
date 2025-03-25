@@ -3,11 +3,40 @@ from abc import ABC, abstractmethod
 from pydantic import BaseModel, Field
 from itertools import zip_longest
 from langchain_core.runnables import Runnable
+from langchain_core.embeddings import Embeddings
+import httpx
+import os
 
 
 class Request(BaseModel):
     user_input: str = Field(description="User's input")
     k: int = Field(default=500, description="Number of results to return")
+
+
+class CustomHFEmbeddings(Embeddings):
+    """
+    Custom class to handle the embeddings from the Hugging Face Hub API.
+    """
+    def __init__(self, endpoint_url):
+        super().__init__()
+        self.endpoint_url = endpoint_url
+        self.headers = {
+            "Accept": "application/json",
+            "Authorization": f"Bearer {os.getenv('HUGGINGFACEHUB_API_KEY')}",
+            "Content-Type": "application/json"
+        }
+
+    def inference(self, payload):
+        response = httpx.post(self.endpoint_url, headers=self.headers, json=payload)
+        response.raise_for_status()
+        return response.json()
+
+    def embed_query(self, text):
+        output = self.inference({"inputs": text, "parameters": {}})
+        return output[0] if output else None
+
+    def embed_documents(self, texts):
+        return [self.embed_query(text) for text in texts]
 
 
 class StdOutHandler:

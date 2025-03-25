@@ -9,11 +9,13 @@ import weaviate
 from weaviate.classes.init import Auth
 from langchain_weaviate import WeaviateVectorStore
 from langchain_core.documents import Document
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from langchain_openai import ChatOpenAI
 
-from src.utils import Request
+from src.utils import Request, CustomHFEmbeddings
 from src.prompt import make_prompt
+
+
+EMBEDDER_ENDPOINT_URL = "https://phjc1sw66fzgqg4f.us-east-1.aws.endpoints.huggingface.cloud"
 
 
 chain = embedder = client = db = None
@@ -34,11 +36,7 @@ async def lifespan(app: FastAPI):
     print("Chain created")
 
     ### Embedder configuration ###
-
-    model_name = "sentence-transformers/all-mpnet-base-v2"
-    embedder = HuggingFaceEndpointEmbeddings(
-        model=model_name, task="feature-extraction"
-    )
+    embedder = CustomHFEmbeddings(EMBEDDER_ENDPOINT_URL)
     print("Embedder created")
 
     ### WEAVIATE cliet configuration ###
