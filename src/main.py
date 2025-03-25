@@ -74,7 +74,13 @@ app = FastAPI(lifespan=lifespan)
 
 
 def serialize_docs(docs: list[Document]) -> list[dict]:
-    return [{"title": doc.page_content, "url": doc.metadata.get('url', '')} for doc in docs]
+    return [
+        {
+            "title": doc.page_content,
+            "url": doc.metadata.get('url', ''),
+            'hn_id': doc.metadata.get('hn_id', '')
+        } for doc in docs
+    ]
 
 
 async def wait_for_db_ready(timeout=30) -> bool:

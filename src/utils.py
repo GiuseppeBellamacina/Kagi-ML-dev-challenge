@@ -181,6 +181,10 @@ def interleave_lists(lists):
     if not lists or not all(isinstance(l, list) for l in lists):
         return lists
     result = []
+    seen_ids = set()
     for elements in zip_longest(*lists, fillvalue=None):
-        result.extend(filter(lambda x: x is not None, elements))
+        for item in elements:
+            if item is not None and item['id'] not in seen_ids:
+                seen_ids.add(item['id'])
+                result.append(item)
     return result

@@ -67,7 +67,9 @@ async def search_with_streaming():
                             if "results" in data and "query" in data:
                                 handler.on_new_results(data["query"], data["results"])
                                 results.append(data["results"])
+                        number_of_results = sum(len(r) for r in results)
                         st.session_state.results = interleave_lists(results)
+                        duplicate_results = len(st.session_state.results) - number_of_results
                 else:
                     response = await client.post(SEARCH_URL, json={"user_input": user_bio, "k": k_value}, timeout=60.0)
                     data = response.json()
@@ -78,7 +80,12 @@ async def search_with_streaming():
                         handler.on_new_results(user_bio, data["results"], show_latency=True)
                         st.session_state.results = data["results"]
 
-            st.success(f"🎉 **Search complete! {len(st.session_state.results)} results found.**")
+            if st.session_state.results:
+                st.success(f"🎉 **Search complete! {len(st.session_state.results)} results found.**")
+                if duplicate_results > 0:
+                    st.info(f"ℹ️ **Note:** {duplicate_results} duplicate results were removed.")
+            else:
+                st.warning("⚠️ **No results found. Please try a different bio.**")
         except Exception as e:
             st.error(f"⚠️ **Connection error:** {str(e)}")
             raise e
