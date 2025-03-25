@@ -69,7 +69,7 @@ async def search_with_streaming():
                                 results.append(data["results"])
                         st.session_state.results = interleave_lists(results)
                 else:
-                    response = client.post(SEARCH_URL, json={"user_input": user_bio, "k": k_value}, timeout=60.0)
+                    response = await client.post(SEARCH_URL, json={"user_input": user_bio, "k": k_value}, timeout=60.0)
                     data = response.json()
                     if "error" in data:
                         handler.error(Exception(data["error"]))
