@@ -5,8 +5,8 @@ import asyncio
 
 from utils import StdOutHandler, interleave_lists
 
-SEARCH_URL = "http://127.0.0.1:8100/search"
-SEARCH_LLM_URL = "http://127.0.0.1:8100/search_llm"
+SEARCH_URL = "https://kagi-ml-dev-challenge.onrender.com/search"
+SEARCH_LLM_URL = "https://kagi-ml-dev-challenge.onrender.com/search_llm"
 ARTICLES_PER_PAGE = 20
 
 st.set_page_config(page_title="Hacker News Search", page_icon="🔍")
@@ -69,7 +69,7 @@ async def search_with_streaming():
                                 results.append(data["results"])
                         st.session_state.results = interleave_lists(results)
                 else:
-                    response = httpx.post(SEARCH_URL, json={"user_input": user_bio, "k": k_value}, timeout=60.0)
+                    response = client.post(SEARCH_URL, json={"user_input": user_bio, "k": k_value}, timeout=60.0)
                     data = response.json()
                     if "error" in data:
                         handler.error(Exception(data["error"]))
