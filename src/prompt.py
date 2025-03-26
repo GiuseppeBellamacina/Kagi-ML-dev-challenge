@@ -62,6 +62,3 @@ EXAMPLES: \
     )
 
     return prompt
-
-p = make_prompt()
-print(p.invoke({"input": "What are some ways to do fast query reformulation"}))
