@@ -110,6 +110,8 @@ async def handle_llm_search(client: httpx.AsyncClient, handler: StdOutHandler):
             elif "results" in data and "query" in data:
                 handler.on_new_results(data["query"], data["results"])
                 results.append(data["results"])
+            elif "done" in data:
+                break
             else:
                 handler.error(Exception(f"Invalid data: {data}"))
                 return
