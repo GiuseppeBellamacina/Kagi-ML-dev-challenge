@@ -143,42 +143,50 @@ async def generate_results(query, k):
     sub_queries = []
 
     # LLM streaming: immediately sends each token to the client.
-
     async for token_obj in chain.astream({"input": query}):
         token = token_obj.content  # Assume each token is contained in .content
         if token:
             # Immediately send the token
-
             yield f"data: {json.dumps({'chunk': token})}\n\n"
             buffer += token
-        # Extract subqueries from the buffer when a newline ("\n") is found.
 
+        # Extract subqueries from the buffer when a newline ("\n") is found.
         while "\n" in buffer:
             sub_query, buffer = buffer.split("\n", 1)
             sub_query = sub_query.strip()
             if sub_query:
                 sub_queries.append(sub_query)
+
     if buffer:
         sub_query = buffer.strip()
         if sub_query:
             sub_queries.append(sub_query)
+
     # At this point, the LLM streaming has completed.
     # If any subqueries were generated, perform a DB search.
 
     if sub_queries:
         k_per_query = max(1, k // len(sub_queries))
+        tasks = []
+
+        # Create the tasks for parallel execution using asyncio.gather.
         for sub_query in sub_queries:
-            try:
-                results = await search_stories(sub_query, k_per_query)
-                # Serialize the documents and send them as a single event.
+            tasks.append(search_stories(sub_query, k_per_query))
 
+        try:
+            # Execute all DB search tasks in parallel
+            results_list = await asyncio.gather(*tasks)
+
+            # Send the results for each subquery as a single event.
+            for sub_query, results in zip(sub_queries, results_list):
                 yield f"data: {json.dumps({'results': results, 'query': sub_query})}\n\n"
-            except Exception as e:
-                # If there's a DB error, send an error message for that subquery, but continue.
 
+        except Exception as e:
+            # If there's a DB error, send an error message for each subquery, but continue processing.
+            for sub_query in sub_queries:
                 yield f"data: {json.dumps({'error': f'DB error on {sub_query}: {str(e)}'})}\n\n"
-    # Signal to the client that streaming is complete.
 
+    # Signal to the client that streaming is complete.
     yield 'data: {"done": true}\n\n'
 
 
