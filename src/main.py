@@ -36,6 +36,7 @@ async def lifespan(app: FastAPI):
     print("Chain created")
 
     ### Embedder configuration ###
+    
     embedder = CustomHFEmbeddings(EMBEDDER_ENDPOINT_URL)
     print("Embedder created")
 
