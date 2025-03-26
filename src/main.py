@@ -112,10 +112,12 @@ async def search(request: Request):
     return JSONResponse({"results": results})
 
 
+# Endpoint for inactivity check
+
+
 @app.get("/keep_alive")
 async def keep_alive():
     # A simple endpoint to keep the server alive and prevent it from sleeping.
-
     return {"message": "I don't want to spend money on a better hosting plan"}
 
 
@@ -167,23 +169,21 @@ async def generate_results(query, k):
 
     if sub_queries:
         k_per_query = max(1, k // len(sub_queries))
-        tasks = []
 
-        # Create the tasks for parallel execution using asyncio.gather.
-        for sub_query in sub_queries:
-            tasks.append(search_stories(sub_query, k_per_query))
+        # Map subquery -> task
+        task_map = {sub_query: search_stories(sub_query, k_per_query) for sub_query in sub_queries}
 
         try:
             # Execute all DB search tasks and yield results as soon as each one completes
-            for task in asyncio.as_completed(tasks):
+            for task in asyncio.as_completed(task_map.values()):
                 try:
                     results = await task
-                    sub_query = sub_queries[tasks.index(task)]
+                    # Recover the corresponding subquery
+                    sub_query = next(k for k, v in task_map.items() if v is task)
                     yield f"data: {json.dumps({'results': results, 'query': sub_query})}\n\n"
                 except Exception as e:
-                    sub_query = sub_queries[tasks.index(task)]
+                    sub_query = next(k for k, v in task_map.items() if v is task)
                     yield f"data: {json.dumps({'error': f'DB error on {sub_query}: {str(e)}'})}\n\n"
-
         except Exception as e:
             # If there's a DB error, send an error message for each subquery, but continue processing.
             for sub_query in sub_queries:

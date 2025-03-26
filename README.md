@@ -89,7 +89,7 @@ After integrating the **full dataset**, I ran new FAISS-based searches:
 
 - **CPU-only FAISS:**
   - **Pros:** High-quality results.
-  - **Cons:** **2+ seconds per query**—too slow.
+  - **Cons:** **2+ seconds per query**: too slow.
 
 - **GPU-accelerated FAISS (WSL):**
   - **Pros:** Search time was **cut in half**.
