@@ -97,17 +97,23 @@ async def handle_llm_search(client: httpx.AsyncClient, handler: StdOutHandler):
                 continue
             if line.startswith("data: "):
                 line = line[len("data: ") :]
-            data = json.loads(line)
+            try:
+                data = json.loads(line)
+            except json.JSONDecodeError:
+                continue
 
             if "error" in data:
                 handler.error(Exception(data["error"]))
                 return
-            if "chunk" in data:
+            elif "chunk" in data:
                 handler.on_new_chunk(data["chunk"])
-            if "results" in data and "query" in data:
+            elif "results" in data and "query" in data:
                 handler.on_new_results(data["query"], data["results"])
-
                 results.append(data["results"])
+            else:
+                handler.error(Exception(f"Invalid data: {data}"))
+                return
+            
         number_of_results = sum(len(r) for r in results)
         st.session_state.results = interleave_lists(results)
         st.session_state.duplicate_results = (
