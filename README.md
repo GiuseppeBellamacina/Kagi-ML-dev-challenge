@@ -2,7 +2,7 @@
 
 ## **🪐 Introduction**  
 
-This project was developed as part of the **Kagi ML Dev Challenge**, with the goal of building an efficient and intuitive system for **query reformulation** and **information retrieval**. The challenge consisted of two main tasks:  
+This project was developed as part of the **[Kagi ML Dev Challenge](https://hackmd.io/@vprelovac/rJ2G_Tx9T)**, with the goal of building an efficient and intuitive system for **query reformulation** and **information retrieval**. The challenge consisted of two main tasks:  
 
 1. **Re-ranking Hacker News stories** based on user interests.  
 2. **Query expansion** using a machine learning model to enhance search engine queries.  
