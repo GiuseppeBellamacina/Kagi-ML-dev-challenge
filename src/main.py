@@ -146,7 +146,7 @@ async def generate_results(query, k):
 
     # LLM streaming: immediately sends each token to the client.
     async for token_obj in chain.astream({"input": query}):
-        token = token_obj.content  # Assume each token is contained in .content
+        token = token_obj.content
         if token:
             # Immediately send the token
             yield f"data: {json.dumps({'chunk': token})}\n\n"
@@ -169,25 +169,28 @@ async def generate_results(query, k):
 
     if sub_queries:
         k_per_query = max(1, k // len(sub_queries))
+        queue = asyncio.Queue() # Queue to store results and errors
 
-        # Map subquery -> task
-        task_map = {sub_query: search_stories(sub_query, k_per_query) for sub_query in sub_queries}
+        async def worker(sub_query):
+            try:
+                results = await search_stories(sub_query, k_per_query)
+                await queue.put((sub_query, results, None))
+            except Exception as e:
+                await queue.put((sub_query, None, str(e)))
 
-        try:
-            # Execute all DB search tasks and yield results as soon as each one completes
-            for task in asyncio.as_completed(task_map.values()):
-                try:
-                    results = await task
-                    # Recover the corresponding subquery
-                    sub_query = next(k for k, v in task_map.items() if v is task)
-                    yield f"data: {json.dumps({'results': results, 'query': sub_query})}\n\n"
-                except Exception as e:
-                    sub_query = next(k for k, v in task_map.items() if v is task)
-                    yield f"data: {json.dumps({'error': f'DB error on {sub_query}: {str(e)}'})}\n\n"
-        except Exception as e:
-            # If there's a DB error, send an error message for each subquery, but continue processing.
-            for sub_query in sub_queries:
-                yield f"data: {json.dumps({'error': f'DB error on {sub_query}: {str(e)}'})}\n\n"
+        # Launch all database search tasks concurrently
+        tasks = [asyncio.create_task(worker(sub_query)) for sub_query in sub_queries]
+
+        # Process results as they become available
+        for _ in range(len(tasks)):
+            sub_query, results, error = await queue.get()
+            if error:
+                yield f"data: {json.dumps({'error': f'DB error on {sub_query}: {error}'})}\n\n"
+            else:
+                yield f"data: {json.dumps({'results': results, 'query': sub_query})}\n\n"
+
+        # Ensure all tasks are completed before proceeding
+        await asyncio.gather(*tasks, return_exceptions=True)
 
     # Signal to the client that streaming is complete.
     yield 'data: {"done": true}\n\n'
