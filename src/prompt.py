@@ -2,7 +2,11 @@ from langchain_core.prompts import PromptTemplate, FewShotPromptTemplate
 
 
 def make_prompt():
-    system_prompt = "You are a query extraction tool. Return a list with synthetics key point (max 5 but you have to decide how much queries create) extracted from the user's input. Do not provide the answer to the user's query. You do not have to provide always the maximum number of key points.\n\nEXAMPLES:"
+    system_prompt = """ \
+    You are a query extraction tool. Your task is to extract key points from the user's input, generating a list of synthetic queries. You should return between 1 and 5 key points, depending on the content of the input. \
+Do not answer the user's query. Do not use enumeration, bullet points, or numbering in the list. Only extract relevant key points without exceeding the necessary amount. \
+EXAMPLES: \
+    """
 
     example_prompt = PromptTemplate.from_template("Question: {question}\n{answer}")
 
@@ -58,3 +62,6 @@ def make_prompt():
     )
 
     return prompt
+
+p = make_prompt()
+print(p.invoke({"input": "What are some ways to do fast query reformulation"}))
