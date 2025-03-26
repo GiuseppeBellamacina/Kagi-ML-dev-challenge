@@ -1,6 +1,6 @@
 # **Kagi ML Dev Challenge**  
 
-## **Introduction**  
+## **🪐 Introduction**  
 
 This project was developed as part of the **Kagi ML Dev Challenge**, with the goal of building an efficient and intuitive system for **query reformulation** and **information retrieval**. The challenge consisted of two main tasks:  
 
@@ -159,7 +159,7 @@ I deployed:
 
 ---
 
-## **Project Architecture**
+## **✨ Project Architecture**
 ```mermaid
 graph TD;
     A[User submits bio] --> B(API Server)
@@ -187,10 +187,10 @@ The system follows a structured pipeline to process user queries efficiently:
    - The search engine retrieves the most relevant stories based on vector similarity.  
 4. **Response to Client:**  
    - The API server returns the ranked results to the client for display.  
-   
+
 ---
 
-## **Installation & Setup**
+## **⚙️ Installation & Setup**
 To run the API locally:  
 
 ```bash
@@ -208,7 +208,7 @@ streamlit run src/app.py
 
 ---
 
-## **API Usage**
+## **📬 API Usage**
 
 `/search`
 
