@@ -174,12 +174,15 @@ async def generate_results(query, k):
             tasks.append(search_stories(sub_query, k_per_query))
 
         try:
-            # Execute all DB search tasks in parallel
-            results_list = await asyncio.gather(*tasks)
-
-            # Send the results for each subquery as a single event.
-            for sub_query, results in zip(sub_queries, results_list):
-                yield f"data: {json.dumps({'results': results, 'query': sub_query})}\n\n"
+            # Execute all DB search tasks and yield results as soon as each one completes
+            for task in asyncio.as_completed(tasks):
+                try:
+                    results = await task
+                    sub_query = sub_queries[tasks.index(task)]
+                    yield f"data: {json.dumps({'results': results, 'query': sub_query})}\n\n"
+                except Exception as e:
+                    sub_query = sub_queries[tasks.index(task)]
+                    yield f"data: {json.dumps({'error': f'DB error on {sub_query}: {str(e)}'})}\n\n"
 
         except Exception as e:
             # If there's a DB error, send an error message for each subquery, but continue processing.
