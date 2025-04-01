@@ -15,7 +15,7 @@ from src.utils import Request, CustomHFEmbeddings
 from src.prompt import make_prompt
 
 
-EMBEDDER_ENDPOINT_URL = "https://phjc1sw66fzgqg4f.us-east-1.aws.endpoints.huggingface.cloud"
+EMBEDDER_ENDPOINT_URL = os.environ["EMBEDDER_ENDPOINT_URL"]
 
 
 chain = embedder = client = db = None
