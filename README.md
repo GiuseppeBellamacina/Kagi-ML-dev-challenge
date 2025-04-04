@@ -162,17 +162,17 @@ I deployed:
 ## **✨ Project Architecture**
 ```mermaid
 graph TD;
-    A[User submits bio] --> B(API Server)
-    B --> C{Use LLM?}
+    A[User submits bio] -- 1 --> B(API Server)
+    B -- 2 --> C{Use LLM?}
     C -- Yes --> D[LLM Query Expansion]
     D --> B
     C -- No --> E[Skip LLM]
-    B --> F[Weaviate DB]
-    F --> G[Custom Embedder Service]
+    B -- 3 --> F[Weaviate DB]
+    F -- 3.5 --> G[Custom Embedder Service]
     G --> F
     F --> H[Ranked Results]
     H --> B
-    B --> I[Client Display]
+    B -- 4 --> I[Client Display]
 ```
 
 The system follows a structured pipeline to process user queries efficiently:
