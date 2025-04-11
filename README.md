@@ -2,7 +2,7 @@
 
 ⚠️⚠️⚠️⚠️⚠️
 
-I disabled API server at the moment. Please contact me at bellamacina50@gmail.com to activate it or see the following video demo **[YouTube Demo](https://www.youtube.com/watch?v=ubm9zkNf8jM)**
+The API server is currently disabled. Please contact me at bellamacina50@gmail.com to activate it or see the following video demo **[YouTube Demo](https://www.youtube.com/watch?v=ubm9zkNf8jM)**
 
 ⚠️⚠️⚠️⚠️⚠️
 
