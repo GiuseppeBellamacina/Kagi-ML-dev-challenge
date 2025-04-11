@@ -1,5 +1,11 @@
 # **Kagi ML Dev Challenge**
 
+⚠️⚠️⚠️⚠️⚠️
+
+I disabled API server at the moment. Please contact me at bellamacina50@gmail.com to activate it or see the following video demo **[YouTube Demo](https://www.youtube.com/watch?v=ubm9zkNf8jM)**
+
+⚠️⚠️⚠️⚠️⚠️
+
 ## **🪐 Introduction**
 
 This project was developed as part of the **[Kagi ML Dev Challenge](https://hackmd.io/@vprelovac/rJ2G_Tx9T)**, with the goal of building an efficient and intuitive system for **query reformulation** and **information retrieval**. The challenge consisted of two main tasks:

@@ -18,6 +18,9 @@ st.markdown(account, unsafe_allow_html=True)
 
 st.title("🔍 Hacker News Relevance Search")
 st.write("Enter your bio to find the most relevant Hacker News stories.")
+st.warning(
+    "⚠️ **The API is currently disabled.** You can watch a [YouTube Demo](https://www.youtube.com/watch?v=ubm9zkNf8jM) or contact me at **bellamacina50@gmail.com** for more information."
+)
 
 
 user_bio = st.text_area(
