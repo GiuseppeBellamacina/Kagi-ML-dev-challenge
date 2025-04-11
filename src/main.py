@@ -16,7 +16,7 @@ from src.prompt import make_prompt
 
 
 EMBEDDER_ENDPOINT_URL = os.environ["EMBEDDER_ENDPOINT_URL"]
-INDEX_NAME = os.environ["INDEX_NAME"]
+WEAVIATE_INDEX_NAME = os.environ["WEAVIATE_INDEX_NAME"]
 
 
 chain = embedder = client = db = None
@@ -57,7 +57,7 @@ async def lifespan(app: FastAPI):
         print("Weaviate is ready")
     db = WeaviateVectorStore(
         client=client,
-        index_name=INDEX_NAME,
+        index_name=WEAVIATE_INDEX_NAME,
         text_key="text",
         embedding=embedder,
     )
