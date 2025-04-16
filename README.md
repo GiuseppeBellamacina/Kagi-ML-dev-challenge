@@ -1,11 +1,5 @@
 # **Kagi ML Dev Challenge**
 
-⚠️⚠️⚠️⚠️⚠️
-
-The API server is currently disabled. Please contact me at bellamacina50@gmail.com to activate it or see the following video demo **[YouTube Demo](https://www.youtube.com/watch?v=ubm9zkNf8jM)**
-
-⚠️⚠️⚠️⚠️⚠️
-
 ## **🪐 Introduction**
 
 This project was developed as part of the **[Kagi ML Dev Challenge](https://hackmd.io/@vprelovac/rJ2G_Tx9T)**, with the goal of building an efficient and intuitive system for **query reformulation** and **information retrieval**. The challenge consisted of two main tasks:
@@ -18,11 +12,6 @@ This project was developed as part of the **[Kagi ML Dev Challenge](https://hack
 - Optimize search relevance and ranking.
 - Achieve sub-100ms latency for query reformulation.
 - Deploy a live demo for real-time testing.
-
-This repository contains all the code, documentation, and links to both the **live demo** and the **API endpoint**.
-
-- **[Streamlit Demo](https://kagi-ml-dev-challenge.streamlit.app)**
-- **[API Endpoint](https://kagi-ml-dev-challenge.onrender.com)** (see **API Usage section**)
 
 ---
 

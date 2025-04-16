@@ -6,8 +6,8 @@ import asyncio
 from utils import StdOutHandler, interleave_lists
 
 
-SEARCH_URL = "https://kagi-ml-dev-challenge.onrender.com/search"
-SEARCH_LLM_URL = "https://kagi-ml-dev-challenge.onrender.com/search_llm"
+SEARCH_URL = ""
+SEARCH_LLM_URL = ""
 ARTICLES_PER_PAGE = 20
 
 
@@ -18,9 +18,6 @@ st.markdown(account, unsafe_allow_html=True)
 
 st.title("🔍 Hacker News Relevance Search")
 st.write("Enter your bio to find the most relevant Hacker News stories.")
-st.warning(
-    "⚠️ **The API is currently disabled.** You can watch a [YouTube Demo](https://www.youtube.com/watch?v=ubm9zkNf8jM) or contact me at **bellamacina50@gmail.com** for more information."
-)
 
 
 user_bio = st.text_area(
