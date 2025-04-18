@@ -1,5 +1,7 @@
 # **Kagi ML Dev Challenge**
 
+**[YouTube Demo](https://www.youtube.com/watch?v=ubm9zkNf8jM)**
+
 ## **🪐 Introduction**
 
 This project was developed as part of the **[Kagi ML Dev Challenge](https://hackmd.io/@vprelovac/rJ2G_Tx9T)**, with the goal of building an efficient and intuitive system for **query reformulation** and **information retrieval**. The challenge consisted of two main tasks:
